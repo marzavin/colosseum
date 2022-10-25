@@ -1,10 +1,42 @@
-const { app, BrowserWindow, ipcMain, nativeTheme } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain, nativeTheme } = require('electron');
 const path = require('path');
+
+const themeMenuTemplate = [
+  {
+    label: "Theme",
+    submenu: [
+      {
+        label: "System",
+        click: async () => {
+          nativeTheme.themeSource = 'system';
+        }
+      },
+      {
+        label: "Dark",
+        click: async () => {
+          nativeTheme.themeSource = 'dark';
+        }
+      },
+      {
+        label: "Light",
+        click: async () => {
+          nativeTheme.themeSource = 'light';
+        }
+      }
+    ]
+  }
+];
+
+const themeMenu = Menu.buildFromTemplate(themeMenuTemplate);
+
+Menu.setApplicationMenu(themeMenu);
 
 const createWindow = () => {
   const appWindow = new BrowserWindow({
-    width: 1024,
-    height: 768,
+    width: 800,
+    minWidth: 800,
+    height: 600,
+    minHeight: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     }
