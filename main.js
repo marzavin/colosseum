@@ -3,25 +3,56 @@ const path = require('path');
 
 const themeMenuTemplate = [
   {
-    label: "Theme",
+    label: "Application",
     submenu: [
       {
-        label: "System",
-        click: async () => {
-          nativeTheme.themeSource = 'system';
-        }
-      },
+        role: "quit"
+      }
+    ]
+  },
+  {
+    label: "View",
+    submenu: [
       {
-        label: "Dark",
-        click: async () => {
-          nativeTheme.themeSource = 'dark';
-        }
+        label: "Theme",
+        submenu: [
+          {
+            label: "Auto",
+            click: async () => {
+              nativeTheme.themeSource = 'system';
+            }
+          },
+          {
+            label: "Dark",
+            click: async () => {
+              nativeTheme.themeSource = 'dark';
+            }
+          },
+          {
+            label: "Light",
+            click: async () => {
+              nativeTheme.themeSource = 'light';
+            }
+          }
+        ]
       },
+      { type: 'separator' },
+      { role: "reload" },
+      { role: 'forceReload' },
+      { role: 'toggleDevTools' },
+      { type: 'separator' },
+      { role: 'resetZoom' },
+      { role: 'zoomIn' },
+      { role: 'zoomOut' },
+      { type: 'separator' },
+      { role: 'togglefullscreen' }
+    ]
+  },
+  {
+    label: "Window",
+    submenu: [
       {
-        label: "Light",
-        click: async () => {
-          nativeTheme.themeSource = 'light';
-        }
+        role: "close"
       }
     ]
   }
