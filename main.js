@@ -1,35 +1,43 @@
 const { app, BrowserWindow, Menu, ipcMain, nativeTheme } = require('electron');
 const path = require('path');
 
+const isMac = process.platform === 'darwin';
+
+const toPascalCase = str => (str.match(/[a-zA-Z0-9]+/g) || []).map(w => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join('');
+
 const themeMenuTemplate = [
   {
-    label: "Application",
+    label: (isMac ? toPascalCase(app.name) : 'Application'),
     submenu: [
-      {
-        role: "quit"
-      }
+      { role: 'quit' }
     ]
   },
   {
-    label: "View",
+    label: 'View',
     submenu: [
       {
-        label: "Theme",
+        label: 'Theme',
         submenu: [
           {
-            label: "Auto",
+            label: 'Auto',
+            type: 'radio',
+            checked: true,
             click: async () => {
               nativeTheme.themeSource = 'system';
             }
           },
           {
-            label: "Dark",
+            label: 'Dark',
+            type: 'radio',
+            checked: false,
             click: async () => {
               nativeTheme.themeSource = 'dark';
             }
           },
           {
-            label: "Light",
+            label: 'Light',
+            type: 'radio',
+            checked: false,
             click: async () => {
               nativeTheme.themeSource = 'light';
             }
@@ -37,23 +45,28 @@ const themeMenuTemplate = [
         ]
       },
       { type: 'separator' },
-      { role: "reload" },
+      { role: 'reload' },
       { role: 'forceReload' },
       { role: 'toggleDevTools' },
-      { type: 'separator' },
-      { role: 'resetZoom' },
+      { type: 'separator' },    
       { role: 'zoomIn' },
       { role: 'zoomOut' },
+      { role: 'resetZoom' },
       { type: 'separator' },
       { role: 'togglefullscreen' }
     ]
   },
   {
-    label: "Window",
+    label: 'Window',
     submenu: [
-      {
-        role: "close"
-      }
+      { role: 'minimize' },
+      ...(isMac ? [
+        { type: 'separator' },
+        { role: 'front' },
+        { type: 'separator' },
+        { role: 'window' }
+      ] : []),
+      { role: 'close' }
     ]
   }
 ];
