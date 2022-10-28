@@ -1,15 +1,9 @@
-const { remote } = require("electron")
+const { ipcRenderer, contextBridge } = require('electron');
 
-const {
-  isWindowMaximized,
-  closeWindow,
-  minimizeWindow,
-  resizeWindow
-} = require('./src/win-functions.js');
-
-window.addEventListener("DOMContentLoaded", () => {
-  window.isWindowMaximized() = isWindowMaximized;
-  window.closeWindow() = closeWindow;
-  window.minimizeWindow() = minimizeWindow;
-  window.maxUnmaxWindow() = resizeWindow;  
+contextBridge.exposeInMainWorld('mainWindow', {
+  close: () => ipcRenderer.invoke('close-main-window'),
+  maximize: () => ipcRenderer.invoke('maximize-main-window'),
+  unmaximize: () => ipcRenderer.invoke('unmaximize-main-window'),
+  minimize: () => ipcRenderer.invoke('minimize-main-window'),
+  resize: () => ipcRenderer.invoke('resize-main-window')
 });

@@ -4,18 +4,51 @@ const { menu } = require('./src/menu');
 
 const createWindow = () => {
   const appWindow = new BrowserWindow({
-    width: 800,
+    width: 1024,
+    height: 768,
     minWidth: 800,
-    height: 600,
     minHeight: 600,
     frame: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: true
+      contextIsolation: true,
+      sandbox: true
     }
   });
 
   appWindow.loadFile('index.html');
+
+  appWindow.webContents.openDevTools();
+
+  ipcMain.handle('close-main-window', () => {
+    appWindow.close();
+  });
+
+  ipcMain.handle('minimize-main-window', () => {
+    if (appWindow.minimizable) {
+      appWindow.minimize();
+    }
+  });
+
+  ipcMain.handle('maximize-main-window', () => {
+    if (appWindow.maximizable) {
+      appWindow.maximize();
+    }
+  });
+
+  ipcMain.handle('unmaximize-main-window', () => {
+    if (appWindow.isMaximized()) {
+      appWindow.unmaximize();
+    }
+  });
+
+  ipcMain.handle('resize-main-window', () => {
+    if (appWindow.isMaximized()) {
+      appWindow.unmaximize();
+    } else if (appWindow.maximizable) {
+      appWindow.maximize();
+    }
+  });
 };
 
 app.whenReady().then(() => {

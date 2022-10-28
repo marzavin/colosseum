@@ -1,36 +1,22 @@
 window.addEventListener("DOMContentLoaded", () => {
     const minimizeButton = document.getElementById('win-minimize');
     const maximizeButton = document.getElementById('win-maximize');
-    const restoreButton = document.getElementById('win-maximize');
+    const restoreButton = document.getElementById('win-restore');
     const closeButton = document.getElementById('win-close');
 
-    minimizeButton.addEventListener('click', e => {
-        window.minimizeWindow();
-    });
+    closeButton.addEventListener('click', async () => { await window.mainWindow.close(); });
 
-    maximizeButton.addEventListener('click', e => {
-        window.resizeWindow();
-        if (window.isWindowMaximized()) {
-            maximizeButton.classList.add('hidden');
-            restoreButton.classList.remove('hidden');
-        } else {
-            maximizeButton.classList.remove('hidden');
-            restoreButton.classList.add('hidden');
-        }
+    minimizeButton.addEventListener('click', async () => { await window.mainWindow.minimize(); });
+    
+    maximizeButton.addEventListener('click', async () => { 
+        await window.mainWindow.resize();
+        maximizeButton.classList.add('hidden');
+        restoreButton.classList.remove('hidden'); 
     });
-
-    restoreButton.addEventListener('click', e => {
-        window.resizeWindow();
-        if (window.isWindowMaximized()) {
-            maximizeButton.classList.add('hidden');
-            restoreButton.classList.remove('hidden');
-        } else {
-            maximizeButton.classList.remove('hidden');
-            restoreButton.classList.add('hidden');
-        }
-    });
-
-    closeButton.addEventListener('click', e => {
-        window.closeWindow();
+    
+    restoreButton.addEventListener('click', async () => { 
+        await window.mainWindow.resize();
+        maximizeButton.classList.remove('hidden');
+        restoreButton.classList.add('hidden'); 
     });
 });

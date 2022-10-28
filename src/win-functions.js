@@ -39,6 +39,9 @@ function isWindowMaximized(browserWindow = getCurrentWindow()) {
 module.exports = {
     isWindowMaximized,
     closeWindow,
+    getCurrentWindow,
+    maximizeWindow,
     minimizeWindow,
-    resizeWindow   
+    resizeWindow,
+    unmaximizeWindow  
 };
