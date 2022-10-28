@@ -10,6 +10,10 @@ body {
         background: rgb(13, 17, 23);
         color: rgba(201, 209, 217);
     }
+
+    body .header {
+        background: rgb(22, 27, 34);
+    }
 }
 
 @media (prefers-color-scheme: light) {
@@ -24,7 +28,6 @@ body .header {
     justify-content: space-between;
     align-items: center;
     height: 30px;
-    background: rgb(22, 27, 34);
     -webkit-app-region: drag;
 }
 
@@ -61,6 +64,10 @@ body .header .window-menu button {
     color: rgba(255, 255, 255, 0.8);
 }
 
+body .header .window-menu button#win-close:hover {
+    background: rgba(232, 17, 35, .9)
+}
+
 body .header .window-menu button svg {
     fill: currentColor;
 }
@@ -69,17 +76,26 @@ body .header button:hover {
     background: rgba(221, 221, 221, 0.2);
 }
 
-body .header #close-btn:hover {
-    background: rgb(255, 0, 0);
+body .main {
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 auto;
+    height: 100%;
+    min-height: 0;
 }
 
-body .header button i {
-    color: white;
-}
-
-body main .toolbox {
+body .main .toolbox {
+    display: flex;
     width: 50px;
     height: 100%;
+}
+
+body .main .container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-width: 0;
+    max-height: 100%;
 }
 
 .hidden {
