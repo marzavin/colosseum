@@ -1,12 +1,36 @@
-const information = document.getElementById('info');
-information.innerText = `This app is using Chrome (v${versions.chrome()}), Node.js (v${versions.node()}), and Electron (v${versions.electron()})`;
+window.addEventListener("DOMContentLoaded", () => {
+    const minimizeButton = document.getElementById('win-minimize');
+    const maximizeButton = document.getElementById('win-maximize');
+    const restoreButton = document.getElementById('win-maximize');
+    const closeButton = document.getElementById('win-close');
 
-document.getElementById('toggle-dark-mode').addEventListener('click', async () => {
-    const isDarkMode = await window.darkMode.toggle()
-    document.getElementById('theme-source').innerHTML = isDarkMode ? 'Dark' : 'Light'
-});
+    minimizeButton.addEventListener('click', e => {
+        window.minimizeWindow();
+    });
 
-document.getElementById('reset-to-system').addEventListener('click', async () => {
-    await window.darkMode.system()
-    document.getElementById('theme-source').innerHTML = 'System'
+    maximizeButton.addEventListener('click', e => {
+        window.resizeWindow();
+        if (window.isWindowMaximized()) {
+            maximizeButton.classList.add('hidden');
+            restoreButton.classList.remove('hidden');
+        } else {
+            maximizeButton.classList.remove('hidden');
+            restoreButton.classList.add('hidden');
+        }
+    });
+
+    restoreButton.addEventListener('click', e => {
+        window.resizeWindow();
+        if (window.isWindowMaximized()) {
+            maximizeButton.classList.add('hidden');
+            restoreButton.classList.remove('hidden');
+        } else {
+            maximizeButton.classList.remove('hidden');
+            restoreButton.classList.add('hidden');
+        }
+    });
+
+    closeButton.addEventListener('click', e => {
+        window.closeWindow();
+    });
 });

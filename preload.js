@@ -1,12 +1,15 @@
-const { contextBridge, ipcRenderer  } = require('electron')
+const { remote } = require("electron")
 
-contextBridge.exposeInMainWorld('versions', {
-  node: () => process.versions.node,
-  chrome: () => process.versions.chrome,
-  electron: () => process.versions.electron
-});
+const {
+  isWindowMaximized,
+  closeWindow,
+  minimizeWindow,
+  resizeWindow
+} = require('./src/win-functions.js');
 
-contextBridge.exposeInMainWorld('darkMode', {
-  toggle: () => ipcRenderer.invoke('dark-mode:toggle'),
-  system: () => ipcRenderer.invoke('dark-mode:system')
+window.addEventListener("DOMContentLoaded", () => {
+  window.isWindowMaximized() = isWindowMaximized;
+  window.closeWindow() = closeWindow;
+  window.minimizeWindow() = minimizeWindow;
+  window.maxUnmaxWindow() = resizeWindow;  
 });
