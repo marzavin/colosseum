@@ -1,105 +1,54 @@
-const { app, BrowserWindow, Menu, ipcMain, nativeTheme } = require('electron');
+const { app, BrowserWindow, ipcMain, nativeTheme } = require('electron');
 const path = require('path');
-
-const isMac = process.platform === 'darwin';
-
-const toPascalCase = str => (str.match(/[a-zA-Z0-9]+/g) || []).map(w => `${w.charAt(0).toUpperCase()}${w.slice(1)}`).join('');
-
-const themeMenuTemplate = [
-  {
-    label: (isMac ? toPascalCase(app.name) : 'Application'),
-    submenu: [
-      { role: 'quit' }
-    ]
-  },
-  {
-    label: 'View',
-    submenu: [
-      {
-        label: 'Theme',
-        submenu: [
-          {
-            label: 'Auto',
-            type: 'radio',
-            checked: true,
-            click: async () => {
-              nativeTheme.themeSource = 'system';
-            }
-          },
-          {
-            label: 'Dark',
-            type: 'radio',
-            checked: false,
-            click: async () => {
-              nativeTheme.themeSource = 'dark';
-            }
-          },
-          {
-            label: 'Light',
-            type: 'radio',
-            checked: false,
-            click: async () => {
-              nativeTheme.themeSource = 'light';
-            }
-          }
-        ]
-      },
-      { type: 'separator' },
-      { role: 'reload' },
-      { role: 'forceReload' },
-      { role: 'toggleDevTools' },
-      { type: 'separator' },    
-      { role: 'zoomIn' },
-      { role: 'zoomOut' },
-      { role: 'resetZoom' },
-      { type: 'separator' },
-      { role: 'togglefullscreen' }
-    ]
-  },
-  {
-    label: 'Window',
-    submenu: [
-      { role: 'minimize' },
-      ...(isMac ? [
-        { type: 'separator' },
-        { role: 'front' },
-        { type: 'separator' },
-        { role: 'window' }
-      ] : []),
-      { role: 'close' }
-    ]
-  }
-];
-
-const themeMenu = Menu.buildFromTemplate(themeMenuTemplate);
-
-Menu.setApplicationMenu(themeMenu);
+const { menu } = require('./src/menu');
 
 const createWindow = () => {
   const appWindow = new BrowserWindow({
-    width: 800,
+    width: 1024,
+    height: 768,
     minWidth: 800,
-    height: 600,
     minHeight: 600,
+    frame: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true,
+      sandbox: true
     }
-  });
-
-  ipcMain.handle('dark-mode:toggle', () => {
-    if (nativeTheme.shouldUseDarkColors) {
-      nativeTheme.themeSource = 'light'
-    } else {
-      nativeTheme.themeSource = 'dark'
-    }
-    return nativeTheme.shouldUseDarkColors
-  });
-
-  ipcMain.handle('dark-mode:system', () => {
-    nativeTheme.themeSource = 'system'
   });
 
   appWindow.loadFile('index.html');
+
+  appWindow.webContents.openDevTools();
+
+  ipcMain.handle('close-main-window', () => {
+    appWindow.close();
+  });
+
+  ipcMain.handle('minimize-main-window', () => {
+    if (appWindow.minimizable) {
+      appWindow.minimize();
+    }
+  });
+
+  ipcMain.handle('maximize-main-window', () => {
+    if (appWindow.maximizable) {
+      appWindow.maximize();
+    }
+  });
+
+  ipcMain.handle('unmaximize-main-window', () => {
+    if (appWindow.isMaximized()) {
+      appWindow.unmaximize();
+    }
+  });
+
+  ipcMain.handle('resize-main-window', () => {
+    if (appWindow.isMaximized()) {
+      appWindow.unmaximize();
+    } else if (appWindow.maximizable) {
+      appWindow.maximize();
+    }
+  });
 };
 
 app.whenReady().then(() => {
