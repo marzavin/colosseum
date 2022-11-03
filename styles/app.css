@@ -86,8 +86,26 @@ body .main {
 
 body .main .toolbox {
     display: flex;
+    flex-flow: column;
+    justify-content: space-around;
     width: 50px;
     height: 100%;
+}
+
+body .main .toolbox .toolbox-btn {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+body .main .toolbox .toolbox-btn:hover {
+    background: rgba(221, 221, 221, 0.2);
+}
+
+body .main .toolbox .toolbox-btn img {
+    width: 24px;
+    margin: 13px 13px;
+    filter: invert(87%) sepia(2%) saturate(1165%) hue-rotate(169deg) brightness(97%) contrast(90%);
 }
 
 body .main .container {
