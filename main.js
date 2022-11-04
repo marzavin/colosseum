@@ -20,6 +20,10 @@ const createWindow = () => {
 
   appWindow.webContents.openDevTools();
 
+  appWindow.on('resize', () => {
+    appWindow.webContents.send('change-window-state', { isMaximized: appWindow.isMaximized() });
+  });
+
   ipcMain.handle('close-main-window', () => {
     appWindow.close();
   });
@@ -34,12 +38,16 @@ const createWindow = () => {
     if (appWindow.maximizable) {
       appWindow.maximize();
     }
+
+    return { isMaximized: appWindow.isMaximized() };
   });
 
   ipcMain.handle('unmaximize-main-window', () => {
     if (appWindow.isMaximized()) {
       appWindow.unmaximize();
     }
+
+    return { isMaximized: appWindow.isMaximized() };
   });
 
   ipcMain.handle('resize-main-window', () => {
@@ -48,6 +56,8 @@ const createWindow = () => {
     } else if (appWindow.maximizable) {
       appWindow.maximize();
     }
+
+    return { isMaximized: appWindow.isMaximized() };
   });
 };
 

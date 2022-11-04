@@ -1,22 +1,34 @@
-window.addEventListener("DOMContentLoaded", () => {
-    const minimizeButton = document.getElementById('win-minimize');
-    const maximizeButton = document.getElementById('win-maximize');
-    const restoreButton = document.getElementById('win-restore');
-    const closeButton = document.getElementById('win-close');
+const minimizeButton = document.getElementById('win-minimize');
+const maximizeButton = document.getElementById('win-maximize');
+const restoreButton = document.getElementById('win-restore');
+const closeButton = document.getElementById('win-close');
 
+function processWindowState(state) {
+    if(state.isMaximized) {
+        maximizeButton.classList.add('hidden');
+        restoreButton.classList.remove('hidden'); 
+    } else {
+        maximizeButton.classList.remove('hidden');
+        restoreButton.classList.add('hidden'); 
+    } 
+}
+
+window.addEventListener("DOMContentLoaded", () => {
     closeButton.addEventListener('click', async () => { await window.mainWindow.close(); });
 
     minimizeButton.addEventListener('click', async () => { await window.mainWindow.minimize(); });
     
     maximizeButton.addEventListener('click', async () => { 
-        await window.mainWindow.resize();
-        maximizeButton.classList.add('hidden');
-        restoreButton.classList.remove('hidden'); 
+        var windowState = await window.mainWindow.resize();
+        processWindowState(windowState);
     });
     
     restoreButton.addEventListener('click', async () => { 
-        await window.mainWindow.resize();
-        maximizeButton.classList.remove('hidden');
-        restoreButton.classList.add('hidden'); 
+        var windowState = await window.mainWindow.resize();
+        processWindowState(windowState);
     });
+});
+
+window.mainWindow.handleStateChange((event, value) => {
+    processWindowState(value);
 });
