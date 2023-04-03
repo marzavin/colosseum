@@ -1,52 +1,53 @@
 {
   "name": "colosseum",
   "version": "0.1.0",
-  "description": "Colosseum Host App",
-  "main": "main.js",
-  "scripts": {
-    "start": "electron-forge start",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "package": "electron-forge package",
-    "make": "electron-forge make"
-  },
-  "author": "Artsiom Marzavin",
   "license": "MIT",
-  "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.68",
-    "@electron-forge/maker-deb": "^6.0.0-beta.68",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.68",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.68",
-    "@electron-forge/maker-zip": "^6.0.0-beta.68",
-    "electron": "^21.2.0"
+  "main": "main.js",
+  "author": "Artsiom Marzavin",
+  "description": "Colosseum Host App",
+  "scripts": {
+    "ng": "ng",
+    "ngstart": "ng serve",
+    "start": "electron-forge start",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "electron": "ng build --configuration=development && electron .",
+    "package": "ng build && electron-forge package",
+    "make": "ng build && electron-forge make"
   },
+  "private": true,
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
+    "@angular/animations": "^15.2.0",
+    "@angular/common": "^15.2.0",
+    "@angular/compiler": "^15.2.0",
+    "@angular/core": "^15.2.0",
+    "@angular/forms": "^15.2.0",
+    "@angular/platform-browser": "^15.2.0",
+    "@angular/platform-browser-dynamic": "^15.2.0",
+    "@angular/router": "^15.2.0",
+    "electron-squirrel-startup": "^1.0.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.12.0"
   },
-  "config": {
-    "forge": {
-      "packagerConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "colosseum"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ]
-    }
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^15.2.4",
+    "@angular/cli": "~15.2.4",
+    "@angular/compiler-cli": "^15.2.0",
+    "@electron-forge/cli": "^6.1.0",
+    "@electron-forge/maker-deb": "^6.1.0",
+    "@electron-forge/maker-rpm": "^6.1.0",
+    "@electron-forge/maker-squirrel": "^6.1.0",
+    "@electron-forge/maker-zip": "^6.1.0",
+    "@types/jasmine": "~4.3.0",
+    "electron": "^23.2.1",
+    "jasmine-core": "~4.5.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.1.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.0.0",
+    "typescript": "~4.9.4"
   }
 }
