@@ -1,78 +1,38 @@
-const { app, BrowserWindow, ipcMain, nativeTheme } = require('electron');
-const path = require('path');
-const { menu } = require('./src/menu');
+const { app, BrowserWindow } = require('electron');
+const url = require('url');
+const path = require('path'); 
 
-const createWindow = () => {
-  const appWindow = new BrowserWindow({
-    width: 1024,
-    height: 768,
-    minWidth: 800,
-    minHeight: 600,
-    frame: false,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      contextIsolation: true,
-      sandbox: true
+let win;
+
+function createWindow() {
+    win = new BrowserWindow({
+        width: 1024,
+        height: 768
+    });
+
+    win.loadURL(url.format({
+        pathname: path.join(__dirname, 'dist/colosseum/index.html'),
+        protocol: 'file:',
+        slashes: true
+    }));
+
+    //win.webContents.openDevTools();
+
+    win.on('closed', function() {
+        win = null;
+    });
+}
+
+app.on('ready', createWindow);
+
+app.on('window-all-closed', function() {
+    if(process.platform !== 'darwin') {
+        app.quit();
     }
-  });
-
-  appWindow.loadFile('index.html');
-
-  appWindow.webContents.openDevTools();
-
-  appWindow.on('resize', () => {
-    appWindow.webContents.send('change-window-state', { isMaximized: appWindow.isMaximized() });
-  });
-
-  ipcMain.handle('close-main-window', () => {
-    appWindow.close();
-  });
-
-  ipcMain.handle('minimize-main-window', () => {
-    if (appWindow.minimizable) {
-      appWindow.minimize();
-    }
-  });
-
-  ipcMain.handle('maximize-main-window', () => {
-    if (appWindow.maximizable) {
-      appWindow.maximize();
-    }
-
-    return { isMaximized: appWindow.isMaximized() };
-  });
-
-  ipcMain.handle('unmaximize-main-window', () => {
-    if (appWindow.isMaximized()) {
-      appWindow.unmaximize();
-    }
-
-    return { isMaximized: appWindow.isMaximized() };
-  });
-
-  ipcMain.handle('resize-main-window', () => {
-    if (appWindow.isMaximized()) {
-      appWindow.unmaximize();
-    } else if (appWindow.maximizable) {
-      appWindow.maximize();
-    }
-
-    return { isMaximized: appWindow.isMaximized() };
-  });
-};
-
-app.whenReady().then(() => {
-  createWindow();
-
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
-    }
-  });
 });
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+app.on('activate', function( ){
+    if(win === null) {
+        createWindow();
+    }
 });
