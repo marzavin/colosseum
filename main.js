@@ -1,9 +1,10 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain, nativeTheme } = require('electron');
 
 const path = require('node:path');
 
 const createWindow = () => {
     const window = new BrowserWindow({
+        title: 'Colosseum',
         width: 800,
         height: 600,
         webPreferences: {
@@ -11,7 +12,22 @@ const createWindow = () => {
         }
     });
 
+    window.setMenu(null);
+
     window.loadFile('index.html');
+
+    ipcMain.handle('dark-mode:toggle', () => {
+        if (nativeTheme.shouldUseDarkColors) {
+            nativeTheme.themeSource = 'light';
+        } else {
+            nativeTheme.themeSource = 'dark';
+        }
+        return nativeTheme.shouldUseDarkColors;
+    });
+
+    ipcMain.handle('dark-mode:system', () => {
+        nativeTheme.themeSource = 'system';
+    });
 };
 
 app.whenReady().then(() => {
