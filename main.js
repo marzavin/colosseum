@@ -5,14 +5,16 @@ const path = require('node:path');
 const createWindow = () => {
     const window = new BrowserWindow({
         title: 'Colosseum',
-        width: 800,
-        height: 600,
+        width: 1024,
+        height: 728,
+        minWidth: 800,
+        minHeight: 600,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js')
         }
     });
 
-    window.setMenu(null);
+    //window.setMenu(null);
 
     window.loadFile('index.html');
 
